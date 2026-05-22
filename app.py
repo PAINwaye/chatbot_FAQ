@@ -35,7 +35,7 @@ load_css()
 
 query_params = st.query_params
 
-if "code" in query_params and st.session_state.user is None:
+if "code" in query_params:
 
     try:
 
