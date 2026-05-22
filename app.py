@@ -1,5 +1,5 @@
 import streamlit as st
-
+from database.db import supabase
 from chatbot.llm import generate_response
 from chatbot.prompts import get_system_prompt
 
@@ -31,6 +31,31 @@ st.set_page_config(
 
 load_css()
 
+# ---------------- GOOGLE OAUTH SESSION ---------------- #
+
+query_params = st.query_params
+
+if "code" in query_params and st.session_state.user is None:
+
+    try:
+
+        session = supabase.auth.exchange_code_for_session(
+            {
+                "auth_code": query_params["code"]
+            }
+        )
+
+        if session.user:
+
+            st.session_state.user = session.user
+
+            st.query_params.clear()
+
+            st.rerun()
+
+    except Exception as e:
+
+        st.error(e)
 # ---------------- SESSION STATE ---------------- #
 
 if "messages" not in st.session_state:

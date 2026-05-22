@@ -40,16 +40,16 @@ def login_user(email, password):
 
 def google_login():
 
-    try:
+    response = supabase.auth.sign_in_with_oauth(
+        {
+            "provider": "google",
+            "options": {
+                "redirect_to": "https://chatbotfaq-hheymvexpqxbnxa4a34k5u.streamlit.app"
+            }
+        }
+    )
 
-        response = supabase.auth.sign_in_with_oauth({
-            "provider": "google"
-        })
-
-        return response.url
-
-    except Exception as e:
-        st.error(e)
+    return response.url
 
 
 # ---------------- LOGOUT ---------------- #
